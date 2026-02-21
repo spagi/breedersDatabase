@@ -50,10 +50,10 @@ RUN mkdir -p var/cache var/log var/data public/uploads \
 # Build assets (AssetMapper)
 RUN APP_ENV=prod php bin/console asset-map:compile --no-interaction
 
-# Create schema and load demo fixtures.
+# Create schema (via migrations) and load demo fixtures.
 # DoctrineFixturesBundle is dev-only, so we run in dev env and then copy
 # the seeded database to the prod path so it is available at runtime.
-RUN php bin/console doctrine:schema:create --no-interaction \
+RUN php bin/console doctrine:migrations:migrate --no-interaction \
     && php bin/console doctrine:fixtures:load --no-interaction \
     && cp var/data_dev.db var/data_prod.db
 
