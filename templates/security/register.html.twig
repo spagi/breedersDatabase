@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'auth.register_title'|trans }}{% endblock %}
+
+{% block body %}
+<div style="min-height:70vh;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;background:linear-gradient(135deg,var(--color-forest-dark) 0%,var(--color-sage) 100%);">
+    <div class="form-card" style="width:100%;">
+        <div style="text-align:center;margin-bottom:1.75rem;">
+            <div style="font-size:3rem;margin-bottom:.5rem;">🐾</div>
+            <h1 style="font-size:1.65rem;margin-bottom:.25rem;">{{ 'auth.register_title'|trans }}</h1>
+        </div>
+
+        {{ form_start(registrationForm, {attr: {novalidate: 'novalidate'}}) }}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+            {% if registrationForm.vars.errors|length > 0 %}
+                <div class="alert alert-danger">
+                    {{ form_errors(registrationForm) }}
+                </div>
+            {% endif %}
+
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(registrationForm.firstName, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(registrationForm.firstName, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(registrationForm.firstName) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(registrationForm.lastName, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(registrationForm.lastName, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(registrationForm.lastName) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.email, null, {label_attr: {class: 'form-label'}}) }}
+                {{ form_widget(registrationForm.email, {attr: {class: 'form-input'}}) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword, null, {label_attr: {class: 'form-label'}}) }}
+                {{ form_widget(registrationForm.plainPassword, {attr: {class: 'form-input'}}) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+
+            <div class="form-check mb-3">
+                {{ form_widget(registrationForm.agreeTerms) }}
+                {{ form_label(registrationForm.agreeTerms, null, {label_attr: {style: 'font-size:.9rem;color:var(--color-text-muted);'}}) }}
+                {{ form_errors(registrationForm.agreeTerms) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+                {{ 'auth.register_title'|trans }}
+            </button>
+        {{ form_end(registrationForm) }}
+
+        <div style="text-align:center;margin-top:1.5rem;font-size:.9rem;color:var(--color-text-muted);">
+            {{ 'auth.have_account'|trans }}
+            <a href="{{ path('app_login') }}" style="color:var(--color-forest);font-weight:600;">{{ 'nav.login'|trans }}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

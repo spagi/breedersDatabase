@@ -1,0 +1,59 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}{{ breed ? 'Upravit plemeno' : 'admin.add_breed'|trans }}{% endblock %}
+
+{% block admin_body %}
+<h1 style="color:var(--color-forest-dark);margin-bottom:1.5rem;">
+    🐕 {{ breed ? 'Upravit plemeno: ' ~ breed.nameCz : 'admin.add_breed'|trans }}
+</h1>
+
+<div class="form-card form-card-wide" style="margin:0;">
+    <form method="post">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">{{ 'admin.breed_name_cz'|trans }} *</label>
+                <input type="text" name="nameCz" class="form-input" value="{{ breed ? breed.nameCz : '' }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">{{ 'admin.breed_name_en'|trans }} *</label>
+                <input type="text" name="nameEn" class="form-input" value="{{ breed ? breed.nameEn : '' }}" required>
+            </div>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">{{ 'admin.breed_name_sk'|trans }}</label>
+                <input type="text" name="nameSk" class="form-input" value="{{ breed ? breed.nameSk : '' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label">{{ 'admin.fic_code'|trans }}</label>
+                <input type="text" name="ficCode" class="form-input" value="{{ breed ? breed.ficCode : '' }}" placeholder="napr. I/1">
+            </div>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">{{ 'admin.group'|trans }}</label>
+                <select name="group" class="form-select">
+                    <option value="">— žádná —</option>
+                    {% for i in 1..10 %}
+                        <option value="{{ i }}" {{ breed and breed.group == i|string ? 'selected' : '' }}>Skupina {{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">{{ 'admin.size'|trans }}</label>
+                <select name="size" class="form-select">
+                    <option value="">— žádná —</option>
+                    <option value="toy" {{ breed and breed.size == 'toy' ? 'selected' : '' }}>Toy</option>
+                    <option value="small" {{ breed and breed.size == 'small' ? 'selected' : '' }}>Malé</option>
+                    <option value="medium" {{ breed and breed.size == 'medium' ? 'selected' : '' }}>Střední</option>
+                    <option value="large" {{ breed and breed.size == 'large' ? 'selected' : '' }}>Velké</option>
+                    <option value="giant" {{ breed and breed.size == 'giant' ? 'selected' : '' }}>Obří</option>
+                </select>
+            </div>
+        </div>
+        <div style="display:flex;gap:1rem;justify-content:flex-end;margin-top:1.5rem;">
+            <a href="{{ path('admin_breeds') }}" class="btn btn-secondary">{{ 'form.cancel'|trans }}</a>
+            <button type="submit" class="btn btn-primary">{{ 'form.save'|trans }}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

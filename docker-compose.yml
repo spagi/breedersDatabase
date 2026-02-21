@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paw-breeders
+    ports:
+      - "8080:80"
+    volumes:
+      # Persist database and uploads between restarts
+      - paw_data:/var/www/html/var/data
+      - paw_uploads:/var/www/html/public/uploads
+    environment:
+      APP_ENV: prod
+      APP_SECRET: b3e4f5a6c7d8e9f0a1b2c3d4e5f6a7b8
+      DATABASE_URL: "sqlite:////var/www/html/var/data/data_prod.db"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  paw_data:
+  paw_uploads:

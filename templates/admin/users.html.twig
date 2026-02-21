@@ -1,0 +1,64 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}{{ 'admin.users'|trans }}{% endblock %}
+
+{% block admin_body %}
+<h1 style="color:var(--color-forest-dark);margin-bottom:1.5rem;">👤 {{ 'admin.users'|trans }}</h1>
+
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Jméno</th>
+                <th>E-mail</th>
+                <th>Role</th>
+                <th>Stanice</th>
+                <th>Registrace</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td class="text-muted">{{ user.id }}</td>
+                <td><strong>{{ user.fullName }}</strong></td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% for role in user.roles %}
+                        {% if role != 'ROLE_USER' %}
+                            <span class="badge badge-{{ role == 'ROLE_ADMIN' ? 'earth' : 'green' }}">{{ role }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if user.kennel %}
+                        <a href="{{ path('app_kennel_show', {slug: user.kennel.slug}) }}" style="color:var(--color-forest);">{{ user.kennel.name }}</a>
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td class="text-muted">{{ user.createdAt|date('d.m.Y') }}</td>
+                <td>
+                    <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                        <form method="post" action="{{ path('admin_user_toggle_admin', {id: user.id}) }}" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin') }}">
+                            <button type="submit" class="btn btn-sm {{ 'ROLE_ADMIN' in user.roles ? 'btn-danger' : 'btn-secondary' }}"
+                                    title="{{ 'ROLE_ADMIN' in user.roles ? 'admin.remove_admin'|trans : 'admin.make_admin'|trans }}">
+                                {{ 'ROLE_ADMIN' in user.roles ? '🔓' : '🔒' }}
+                            </button>
+                        </form>
+                        {% if user != app.user %}
+                        <form method="post" action="{{ path('admin_user_delete', {id: user.id}) }}" style="display:inline;"
+                              onsubmit="return confirm('{{ 'admin.confirm_delete'|trans }}')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin') }}">
+                            <button type="submit" class="btn btn-sm btn-danger">🗑</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

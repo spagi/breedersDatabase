@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'search.title'|trans }}{% endblock %}
+
+{% block body %}
+<div style="background:linear-gradient(135deg,var(--color-forest-dark) 0%,var(--color-forest) 100%);padding:2.5rem 1.5rem 2rem;color:#fff;">
+    <div style="max-width:1280px;margin:0 auto;">
+        <h1 style="color:#fff;margin-bottom:.5rem;">🔍 {{ 'search.title'|trans }}</h1>
+        <p style="color:rgba(255,255,255,.7);margin:0;">{{ 'search.results'|trans({'%count%': pagination.totalItemCount}) }}</p>
+    </div>
+</div>
+
+<div class="section" style="max-width:1280px;margin:0 auto;">
+    <div class="search-layout">
+
+        {# ── Filters ── #}
+        <aside class="search-filters">
+            <div class="filter-title">🎯 Filtry</div>
+            <form method="get" action="{{ path('app_search') }}">
+                <div class="filter-group">
+                    <label class="filter-label">{{ 'search.filter_name'|trans }}</label>
+                    <input type="text" name="name" class="form-input" value="{{ filters.name }}" placeholder="{{ 'search.filter_name'|trans }}">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">{{ 'search.filter_breed'|trans }}</label>
+                    <select name="breed" class="form-select">
+                        <option value="">{{ 'search.any_breed'|trans }}</option>
+                        {% for breed in breeds %}
+                            <option value="{{ breed.id }}" {% if filters.breed == breed.id|string %}selected{% endif %}>
+                                {{ breed.getName(app.request.locale) }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">{{ 'search.filter_country'|trans }}</label>
+                    <select name="country" class="form-select">
+                        <option value="">{{ 'search.any_country'|trans }}</option>
+                        {% for code, name in countries %}
+                            <option value="{{ code }}" {% if filters.country == code %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">{{ 'search.filter_region'|trans }}</label>
+                    <input type="text" name="region" class="form-input" value="{{ filters.region }}" placeholder="{{ 'search.filter_region'|trans }}">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">{{ 'search.filter_purpose'|trans }}</label>
+                    <select name="purpose" class="form-select">
+                        <option value="">{{ 'search.any_purpose'|trans }}</option>
+                        {% for key, label in purposes %}
+                            <option value="{{ key }}" {% if filters.purpose == key %}selected{% endif %}>{{ label|trans }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+                    {{ 'search.filter_btn'|trans }}
+                </button>
+                {% if filters|filter(v => v != '')|length > 0 %}
+                    <a href="{{ path('app_search') }}" class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:.5rem;">
+                        {{ 'search.reset_btn'|trans }}
+                    </a>
+                {% endif %}
+            </form>
+        </aside>
+
+        {# ── Results ── #}
+        <div>
+            {% if pagination.items|length == 0 %}
+                <div class="empty-state" style="background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-card);padding:3rem;">
+                    <div class="empty-state-icon">🐕</div>
+                    <h3>{{ 'search.no_results'|trans }}</h3>
+                    <a href="{{ path('app_search') }}" class="btn btn-primary mt-2">{{ 'search.reset_btn'|trans }}</a>
+                </div>
+            {% else %}
+                <div class="kennel-grid">
+                    {% for kennel in pagination %}
+                        <a href="{{ path('app_kennel_show', {slug: kennel.slug}) }}" class="kennel-card" style="text-decoration:none;color:inherit;">
+                            <div class="kennel-card-cover">
+                                {% if kennel.coverFilename %}
+                                    <img src="/uploads/covers/{{ kennel.coverFilename }}" alt="{{ kennel.name }}">
+                                {% endif %}
+                                <div class="kennel-card-badge">
+                                    {% if kennel.isVerified %}
+                                        <span class="badge badge-verified">✓</span>
+                                    {% endif %}
+                                    {% for breed in kennel.breeds|slice(0,2) %}
+                                        <span class="badge badge-green">{{ breed.getName(app.request.locale) }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="kennel-card-body">
+                                <h3 class="kennel-card-title">{{ kennel.name }}</h3>
+                                <div class="kennel-card-meta">
+                                    {% if kennel.location %}<span class="meta-item">📍 {{ kennel.location }}</span>{% endif %}
+                                    {% if kennel.purposes %}
+                                        <span class="meta-item">🎯
+                                            {% for p in kennel.purposes|slice(0,2) %}
+                                                {{ ('kennel.purpose.' ~ p)|trans }}{% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                <div class="kennel-card-footer">
+                                    <span class="text-muted" style="font-size:.8rem;">
+                                        {{ kennel.dogs|length }} psů · {{ kennel.litters|length }} vrhů
+                                    </span>
+                                    <span class="btn btn-sm btn-primary">Zobrazit →</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
+                {# Pagination #}
+                <div class="pagination">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

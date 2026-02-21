@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ title|trans }}{% endblock %}
+{% block body %}
+<div style="background:linear-gradient(135deg,var(--color-forest-dark) 0%,var(--color-forest) 100%);padding:2.5rem 1.5rem 2rem;color:#fff;text-align:center;">
+    <h1 style="color:#fff;">🐣 {{ title|trans }}</h1>
+</div>
+<div class="section" style="max-width:700px;margin:0 auto;">
+    <div class="form-card" style="max-width:700px;">
+        {{ form_start(form) }}
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.litterLetter, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.litterLetter) }}
+                </div>
+                <div class="form-check" style="align-self:flex-end;padding-bottom:.65rem;">
+                    {{ form_widget(form.isPlanned) }}
+                    {{ form_label(form.isPlanned, null, {label_attr: {style: 'font-size:.9rem;'}}) }}
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.bornAt, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.bornAt) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.availableFrom, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.availableFrom) }}
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.mother, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.mother) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.father, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.father) }}
+                </div>
+            </div>
+            <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                <div class="form-group">
+                    {{ form_label(form.totalPuppies, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.totalPuppies) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.malePuppies, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.malePuppies) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.femalePuppies, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.femalePuppies) }}
+                </div>
+            </div>
+            <div class="form-check mb-2">
+                {{ form_widget(form.hasPuppiesAvailable) }}
+                {{ form_label(form.hasPuppiesAvailable, null, {label_attr: {style: 'font-size:.9rem;'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.description, null, {label_attr: {class: 'form-label'}}) }}
+                {{ form_widget(form.description) }}
+            </div>
+            <div style="display:flex;gap:1rem;justify-content:flex-end;margin-top:1.5rem;">
+                <a href="{{ path('app_dashboard') }}" class="btn btn-secondary">{{ 'form.cancel'|trans }}</a>
+                <button type="submit" class="btn btn-primary">{{ 'form.save'|trans }}</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

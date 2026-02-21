@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ litter.title }}{% endblock %}
+{% block body %}
+<div style="background:linear-gradient(135deg,var(--color-amber) 0%,var(--color-earth) 100%);padding:2.5rem 1.5rem 2rem;color:#fff;">
+    <div style="max-width:1280px;margin:0 auto;">
+        <p style="color:rgba(255,255,255,.7);margin-bottom:.25rem;">
+            <a href="{{ path('app_kennel_show', {slug: litter.kennel.slug}) }}" style="color:rgba(255,255,255,.8);">{{ litter.kennel.name }}</a>
+        </p>
+        <h1 style="color:#fff;margin-bottom:.75rem;">🐣 {{ litter.title }}</h1>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+            {% if litter.isPlanned %}<span class="badge badge-blue">Plánovaný vrh</span>{% endif %}
+            {% if litter.hasPuppiesAvailable %}<span class="badge badge-verified">Štěňata k dispozici</span>{% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="section" style="max-width:1280px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:2rem;align-items:start;">
+        <div>
+            {# Parents #}
+            {% if litter.mother or litter.father %}
+            <div class="mb-3" style="background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-card);padding:1.5rem;">
+                <h3 style="margin-bottom:1rem;color:var(--color-forest-dark);">Rodiče</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                    {% if litter.mother %}
+                    <div>
+                        <div class="text-muted mb-1" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;">♀ Matka</div>
+                        <strong>{{ litter.mother.name }}</strong>
+                        {% if litter.mother.titles %}<br><small class="text-muted">{{ litter.mother.titles }}</small>{% endif %}
+                    </div>
+                    {% endif %}
+                    {% if litter.father %}
+                    <div>
+                        <div class="text-muted mb-1" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;">♂ Otec</div>
+                        <strong>{{ litter.father.name }}</strong>
+                        {% if litter.father.titles %}<br><small class="text-muted">{{ litter.father.titles }}</small>{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if litter.description %}
+            <div class="mb-3" style="background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-card);padding:1.5rem;">
+                <h3 style="margin-bottom:1rem;color:var(--color-forest-dark);">Popis vrhu</h3>
+                <div style="line-height:1.8;">{{ litter.description|nl2br }}</div>
+            </div>
+            {% endif %}
+
+            {% if litter.puppies is not empty %}
+            <div style="background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-card);padding:1.5rem;">
+                <h3 style="margin-bottom:1rem;color:var(--color-forest-dark);">Štěňata</h3>
+                <div class="dog-grid">
+                    {% for puppy in litter.puppies %}
+                    <div class="dog-card">
+                        <div class="dog-card-photo">
+                            {% if puppy.photoFilename %}
+                                <img src="/uploads/puppies/{{ puppy.photoFilename }}" alt="{{ puppy.name }}">
+                            {% else %}
+                                {{ puppy.isMale ? '🐕' : '🐩' }}
+                            {% endif %}
+                        </div>
+                        <div class="dog-card-body">
+                            <div class="dog-card-name">{{ puppy.name ?: (puppy.isMale ? '♂ Pes' : '♀ Fena') }}</div>
+                            <div class="dog-card-meta">
+                                {% if puppy.color %}<span>{{ puppy.color }}</span>{% endif %}
+                                <span class="badge badge-{{ puppy.status == 'available' ? 'amber' : (puppy.status == 'reserved' ? 'blue' : 'earth') }}">
+                                    {{ ('puppy.status.' ~ puppy.status)|trans }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {# Sidebar #}
+        <div style="position:sticky;top:130px;">
+            <div style="background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-card);padding:1.5rem;">
+                <h3 style="font-size:1rem;color:var(--color-forest-dark);margin-bottom:1.25rem;">Informace o vrhu</h3>
+                <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.9rem;">
+                    {% if litter.bornAt %}
+                    <div><span class="text-muted">Datum narození:</span><br><strong>{{ litter.bornAt|date('d.m.Y') }}</strong></div>
+                    {% endif %}
+                    {% if litter.availableFrom %}
+                    <div><span class="text-muted">Dostupná od:</span><br><strong>{{ litter.availableFrom|date('d.m.Y') }}</strong></div>
+                    {% endif %}
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;text-align:center;padding:1rem 0;border-top:1px solid var(--color-cream-dark);border-bottom:1px solid var(--color-cream-dark);">
+                        <div><div class="litter-stat-num" style="font-size:1.5rem;">{{ litter.malePuppies }}</div><small class="text-muted">♂</small></div>
+                        <div><div class="litter-stat-num" style="font-size:1.5rem;">{{ litter.femalePuppies }}</div><small class="text-muted">♀</small></div>
+                        <div><div class="litter-stat-num" style="font-size:1.5rem;">{{ litter.totalPuppies }}</div><small class="text-muted">celkem</small></div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <a href="{{ path('app_kennel_show', {slug: litter.kennel.slug}) }}" class="btn btn-primary" style="width:100%;justify-content:center;">
+                        {{ litter.kennel.name }} →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

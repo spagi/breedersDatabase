@@ -1,0 +1,195 @@
+nav:
+    home: Home
+    search: Search
+    kennels: Kennels
+    login: Login
+    register: Register
+    logout: Logout
+    dashboard: My Kennel
+    admin: Administration
+    language: Language
+
+home:
+    hero_title: Dog Breeders Database
+    hero_subtitle: Find your dream dog from verified breeders in Czech Republic, Slovakia and abroad
+    search_placeholder: Search breed or kennel...
+    search_btn: Search
+    latest_kennels: Latest Kennels
+    puppies_available: Puppies Available
+    stats_kennels: Registered Kennels
+    stats_litters: Litters
+    stats_breeds: Breeds
+    view_all: View All
+    no_kennels: No kennels registered yet
+    register_kennel: Register My Kennel
+
+kennel:
+    name: Kennel Name
+    breeds: Breeds
+    purposes: Purposes
+    description_cz: Description (Czech)
+    description_en: Description (English)
+    description_sk: Description (Slovak)
+    city: City
+    region: Region
+    country: Country
+    phone: Phone
+    email: Email
+    website: Website
+    facebook: Facebook
+    instagram: Instagram
+    dogs: Kennel Dogs
+    litters: Litters
+    gallery: Gallery
+    contact: Contact
+    location: Location
+    purpose.show: Show
+    purpose.work: Working
+    purpose.sport: Sport
+    purpose.family: Family
+    purpose.hunting: Hunting
+    purpose.herding: Herding
+    purpose.companion: Companion
+    edit_profile: Edit Profile
+    add_dog: Add Dog
+    add_litter: Add Litter
+    verified: Verified Kennel
+    active: Active
+    create_new: Create Kennel
+    edit: Edit Kennel Profile
+    no_dogs: No dogs yet
+    no_litters: No litters yet
+    no_photos: No photos yet
+
+dog:
+    name: Dog Name
+    gender: Gender
+    gender.male: Male
+    gender.female: Female
+    breed: Breed
+    born_at: Date of Birth
+    titles: Titles
+    registration_number: Registration Number
+    chip_number: Chip Number
+    is_stud: Available for Stud
+    description: Description
+    add_new: Add New Dog
+    edit: Edit Dog
+    age: "age: %age% years"
+
+litter:
+    letter: Litter Letter
+    is_planned: Planned Litter
+    born_at: Birth Date
+    available_from: Available From
+    mother: Mother
+    father: Father
+    total_puppies: Total Puppies
+    male_puppies: Males
+    female_puppies: Females
+    has_puppies_available: Puppies Available
+    description: Litter Description
+    add_new: Add Litter
+    edit: Edit Litter
+    puppies: Puppies
+
+puppy:
+    status.available: Available
+    status.reserved: Reserved
+    status.sold: Sold
+    status.kept: Kept in Breeding
+
+search:
+    title: Search Kennels
+    filter_name: Kennel Name
+    filter_breed: Breed
+    filter_country: Country
+    filter_region: Region
+    filter_purpose: Purpose
+    filter_btn: Filter
+    reset_btn: Clear Filters
+    results: "Found %count% kennels"
+    no_results: No kennels found matching your criteria
+    any_breed: All Breeds
+    any_country: All Countries
+    any_purpose: All Purposes
+
+form:
+    first_name: First Name
+    last_name: Last Name
+    email: Email
+    password: Password
+    agree_terms: I agree to the Terms of Use
+    select_country: Select Country
+    select_dog: Select Dog
+    submit: Save
+    cancel: Cancel
+    save: Save Changes
+
+auth:
+    login_title: Login
+    register_title: Register
+    no_account: Don't have an account?
+    have_account: Already have an account?
+    forgot_password: Forgot your password?
+    remember_me: Remember Me
+
+dashboard:
+    title: My Kennel
+    no_kennel: You don't have a registered kennel yet
+    create_kennel: Create Kennel
+    my_dogs: My Dogs
+    my_litters: My Litters
+    edit_profile: Edit Profile
+
+admin:
+    dashboard: Dashboard
+    users: Users
+    kennels: Kennels
+    breeds: Breeds
+    total_users: Total Users
+    total_kennels: Total Kennels
+    total_breeds: Total Breeds
+    make_admin: Grant Admin
+    remove_admin: Remove Admin
+    activate: Activate
+    deactivate: Deactivate
+    verify: Verify
+    unverify: Unverify
+    delete: Delete
+    confirm_delete: Are you sure you want to delete?
+    add_breed: Add Breed
+    breed_name_cz: Name (Czech)
+    breed_name_en: Name (English)
+    breed_name_sk: Name (Slovak)
+    fic_code: FCI Code
+    group: Group
+    size: Size
+
+flash:
+    registration_success: Registration successful. Welcome!
+    kennel_created: Kennel successfully created.
+    kennel_updated: Kennel profile updated.
+    kennel_deleted: Kennel deleted.
+    dog_added: Dog added to kennel.
+    dog_updated: Dog details updated.
+    litter_added: Litter added.
+    litter_updated: Litter updated.
+    user_updated: User updated.
+    user_deleted: User deleted.
+    breed_created: Breed added.
+    breed_updated: Breed updated.
+    breed_deleted: Breed deleted.
+
+validation:
+    email_exists: This email is already registered.
+    slug_exists: This URL is already taken.
+    password_required: Password is required.
+    password_min: Password must be at least %limit% characters.
+    agree_terms: You must agree to the terms.
+
+footer:
+    rights: All rights reserved
+    about: About
+    contact: Contact
+    privacy: Privacy Policy

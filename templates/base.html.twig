@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}{{ 'home.hero_subtitle'|trans }}{% endblock %}">
+    <title>{% block title %}PaW Breeders{% endblock %} — PaW</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body>
+
+{# ==================== NAVBAR ==================== #}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ path('app_home') }}" class="navbar-brand">
+            <span class="paw-icon">🐾</span>
+            PaW Breeders
+        </a>
+
+        {# Desktop nav #}
+        <ul class="nav-links nav-desktop">
+            <li><a href="{{ path('app_home') }}" {% if app.request.attributes.get('_route') == 'app_home' %}class="active"{% endif %}>{{ 'nav.home'|trans }}</a></li>
+            <li><a href="{{ path('app_search') }}" {% if app.request.attributes.get('_route') == 'app_search' %}class="active"{% endif %}>{{ 'nav.search'|trans }}</a></li>
+            {% if is_granted('ROLE_USER') %}
+                <li><a href="{{ path('app_dashboard') }}" {% if app.request.attributes.get('_route') == 'app_dashboard' %}class="active"{% endif %}>{{ 'nav.dashboard'|trans }}</a></li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('admin_dashboard') }}" {% if app.request.attributes.get('_route') starts with 'admin_' %}class="active"{% endif %}>{{ 'nav.admin'|trans }}</a></li>
+            {% endif %}
+        </ul>
+
+        <div class="flex items-center gap-1 nav-desktop">
+            <div class="nav-lang">
+                <a href="{{ path('app_switch_locale', {locale: 'cs'}) }}" class="lang-btn {% if app.request.locale == 'cs' %}active{% endif %}">CS</a>
+                <a href="{{ path('app_switch_locale', {locale: 'sk'}) }}" class="lang-btn {% if app.request.locale == 'sk' %}active{% endif %}">SK</a>
+                <a href="{{ path('app_switch_locale', {locale: 'en'}) }}" class="lang-btn {% if app.request.locale == 'en' %}active{% endif %}">EN</a>
+            </div>
+
+            {% if is_granted('ROLE_USER') %}
+                <span style="color:rgba(255,255,255,.6);font-size:.85rem;margin-left:.5rem;">{{ app.user.firstName }}</span>
+                <a href="{{ path('app_logout') }}" class="btn btn-sm btn-secondary" style="margin-left:.25rem;">{{ 'nav.logout'|trans }}</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-sm btn-secondary">{{ 'nav.login'|trans }}</a>
+                <a href="{{ path('app_register') }}" class="btn btn-sm btn-amber">{{ 'nav.register'|trans }}</a>
+            {% endif %}
+        </div>
+
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">☰</button>
+    </div>
+
+    <div class="mobile-menu hidden" id="mobile-menu">
+        <ul>
+            <li><a href="{{ path('app_home') }}">{{ 'nav.home'|trans }}</a></li>
+            <li><a href="{{ path('app_search') }}">{{ 'nav.search'|trans }}</a></li>
+            {% if is_granted('ROLE_USER') %}
+                <li><a href="{{ path('app_dashboard') }}">{{ 'nav.dashboard'|trans }}</a></li>
+                <li><a href="{{ path('app_logout') }}">{{ 'nav.logout'|trans }}</a></li>
+            {% else %}
+                <li><a href="{{ path('app_login') }}">{{ 'nav.login'|trans }}</a></li>
+                <li><a href="{{ path('app_register') }}">{{ 'nav.register'|trans }}</a></li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('admin_dashboard') }}">{{ 'nav.admin'|trans }}</a></li>
+            {% endif %}
+            <li style="display:flex;gap:.4rem;padding:.5rem .8rem;">
+                <a href="{{ path('app_switch_locale', {locale: 'cs'}) }}" class="lang-btn {% if app.request.locale == 'cs' %}active{% endif %}">CS</a>
+                <a href="{{ path('app_switch_locale', {locale: 'sk'}) }}" class="lang-btn {% if app.request.locale == 'sk' %}active{% endif %}">SK</a>
+                <a href="{{ path('app_switch_locale', {locale: 'en'}) }}" class="lang-btn {% if app.request.locale == 'en' %}active{% endif %}">EN</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+{# ==================== FLASH MESSAGES ==================== #}
+<div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label == 'success' ? 'success' : (label == 'error' ? 'danger' : (label == 'warning' ? 'warning' : 'info')) }}"
+             data-auto-dismiss style="margin-top:.75rem;">
+            {{ message|trans }}
+        </div>
+    {% endfor %}
+{% endfor %}
+</div>
+
+{# ==================== CONTENT ==================== #}
+{% block body %}{% endblock %}
+
+{# ==================== FOOTER ==================== #}
+<footer class="footer">
+    <div class="footer-inner">
+        <div>
+            <div class="footer-brand">🐾 PaW Breeders</div>
+            <p class="footer-desc">{{ 'home.hero_subtitle'|trans }}</p>
+        </div>
+        <div class="footer-col">
+            <h4>{{ 'nav.kennels'|trans }}</h4>
+            <ul class="footer-links">
+                <li><a href="{{ path('app_search') }}">{{ 'nav.search'|trans }}</a></li>
+                {% if is_granted('ROLE_USER') %}
+                    <li><a href="{{ path('app_dashboard') }}">{{ 'nav.dashboard'|trans }}</a></li>
+                {% else %}
+                    <li><a href="{{ path('app_register') }}">{{ 'home.register_kennel'|trans }}</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Info</h4>
+            <ul class="footer-links">
+                <li><a href="#">{{ 'footer.about'|trans }}</a></li>
+                <li><a href="#">{{ 'footer.contact'|trans }}</a></li>
+                <li><a href="#">{{ 'footer.privacy'|trans }}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>&copy; {{ "now"|date("Y") }} PaW Breeders &mdash; {{ 'footer.rights'|trans }}</span>
+    </div>
+</footer>
+
+</body>
+</html>

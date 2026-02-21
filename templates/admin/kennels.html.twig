@@ -1,0 +1,67 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}{{ 'admin.kennels'|trans }}{% endblock %}
+
+{% block admin_body %}
+<h1 style="color:var(--color-forest-dark);margin-bottom:1.5rem;">🏡 {{ 'admin.kennels'|trans }}</h1>
+
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Název</th>
+                <th>Majitel</th>
+                <th>Lokalita</th>
+                <th>Aktivní</th>
+                <th>Ověřená</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for kennel in kennels %}
+            <tr>
+                <td class="text-muted">{{ kennel.id }}</td>
+                <td>
+                    <a href="{{ path('app_kennel_show', {slug: kennel.slug}) }}" style="color:var(--color-forest);font-weight:600;">
+                        {{ kennel.name }}
+                    </a>
+                    <div style="font-size:.78rem;color:var(--color-text-muted);">
+                        {% for breed in kennel.breeds|slice(0,2) %}{{ breed.nameCz }}{% if not loop.last %}, {% endif %}{% endfor %}
+                    </div>
+                </td>
+                <td>{{ kennel.owner.fullName }}</td>
+                <td class="text-muted">{{ kennel.location }}</td>
+                <td>
+                    <span class="badge {{ kennel.isActive ? 'badge-green' : 'badge-earth' }}">
+                        {{ kennel.isActive ? '✓ Ano' : '✗ Ne' }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge {{ kennel.isVerified ? 'badge-verified' : 'badge-earth' }}">
+                        {{ kennel.isVerified ? '✓ Ověřena' : '— Ne' }}
+                    </span>
+                </td>
+                <td>
+                    <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                        <form method="post" action="{{ path('admin_kennel_toggle_active', {id: kennel.id}) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-secondary" title="{{ kennel.isActive ? 'admin.deactivate'|trans : 'admin.activate'|trans }}">
+                                {{ kennel.isActive ? '⏸' : '▶' }}
+                            </button>
+                        </form>
+                        <form method="post" action="{{ path('admin_kennel_toggle_verified', {id: kennel.id}) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-secondary" title="{{ kennel.isVerified ? 'admin.unverify'|trans : 'admin.verify'|trans }}">
+                                {{ kennel.isVerified ? '✗' : '✓' }}
+                            </button>
+                        </form>
+                        <form method="post" action="{{ path('admin_kennel_delete', {id: kennel.id}) }}" style="display:inline;"
+                              onsubmit="return confirm('{{ 'admin.confirm_delete'|trans }}')">
+                            <button type="submit" class="btn btn-sm btn-danger">🗑</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}{{ 'admin.breeds'|trans }}{% endblock %}
+
+{% block admin_body %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+    <h1 style="color:var(--color-forest-dark);">🐕 {{ 'admin.breeds'|trans }}</h1>
+    <a href="{{ path('admin_breed_new') }}" class="btn btn-primary">+ {{ 'admin.add_breed'|trans }}</a>
+</div>
+
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Název (CS)</th>
+                <th>Název (EN)</th>
+                <th>Název (SK)</th>
+                <th>FCI kód</th>
+                <th>Skupina</th>
+                <th>Velikost</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for breed in breeds %}
+            <tr>
+                <td class="text-muted">{{ breed.id }}</td>
+                <td><strong>{{ breed.nameCz }}</strong></td>
+                <td>{{ breed.nameEn }}</td>
+                <td>{{ breed.nameSk }}</td>
+                <td class="text-muted">{{ breed.ficCode }}</td>
+                <td>{{ breed.group }}</td>
+                <td>{{ breed.size }}</td>
+                <td>
+                    <div style="display:flex;gap:.4rem;">
+                        <a href="{{ path('admin_breed_edit', {id: breed.id}) }}" class="btn btn-sm btn-secondary">✏️</a>
+                        <form method="post" action="{{ path('admin_breed_delete', {id: breed.id}) }}" style="display:inline;"
+                              onsubmit="return confirm('{{ 'admin.confirm_delete'|trans }}')">
+                            <button type="submit" class="btn btn-sm btn-danger">🗑</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

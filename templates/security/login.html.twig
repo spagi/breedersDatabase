@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'auth.login_title'|trans }}{% endblock %}
+
+{% block body %}
+<div style="min-height:70vh;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;background:linear-gradient(135deg,var(--color-forest-dark) 0%,var(--color-sage) 100%);">
+    <div class="form-card" style="width:100%;">
+        <div style="text-align:center;margin-bottom:1.75rem;">
+            <div style="font-size:3rem;margin-bottom:.5rem;">🐾</div>
+            <h1 style="font-size:1.65rem;margin-bottom:.25rem;">{{ 'auth.login_title'|trans }}</h1>
+            <p class="text-muted" style="font-size:.9rem;">PaW Breeders</p>
+        </div>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form method="post">
+            <div class="form-group">
+                <label class="form-label" for="inputEmail">{{ 'form.email'|trans }}</label>
+                <input type="email" id="inputEmail" name="_username" class="form-input"
+                       value="{{ last_username }}" autocomplete="email" required autofocus>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="inputPassword">{{ 'form.password'|trans }}</label>
+                <input type="password" id="inputPassword" name="_password" class="form-input"
+                       autocomplete="current-password" required>
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" id="remember_me" name="_remember_me">
+                <label for="remember_me" style="font-size:.9rem;color:var(--color-text-muted);">{{ 'auth.remember_me'|trans }}</label>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+                {{ 'auth.login_title'|trans }}
+            </button>
+        </form>
+
+        <div style="text-align:center;margin-top:1.5rem;font-size:.9rem;color:var(--color-text-muted);">
+            {{ 'auth.no_account'|trans }}
+            <a href="{{ path('app_register') }}" style="color:var(--color-forest);font-weight:600;">{{ 'nav.register'|trans }}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

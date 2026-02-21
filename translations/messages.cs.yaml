@@ -1,0 +1,195 @@
+nav:
+    home: Domů
+    search: Vyhledávání
+    kennels: Chovatelské stanice
+    login: Přihlásit se
+    register: Registrovat se
+    logout: Odhlásit se
+    dashboard: Moje stanice
+    admin: Administrace
+    language: Jazyk
+
+home:
+    hero_title: Databáze chovatelských stanic psů
+    hero_subtitle: Najděte svého vysněného psa od prověřených chovatelů v Česku, Slovensku i zahraničí
+    search_placeholder: Hledat plemeno nebo stanici...
+    search_btn: Hledat
+    latest_kennels: Nejnovější stanice
+    puppies_available: Štěňata k dispozici
+    stats_kennels: Registrovaných stanic
+    stats_litters: Vrhů
+    stats_breeds: Plemen
+    view_all: Zobrazit vše
+    no_kennels: Zatím žádné chovatelské stanice
+    register_kennel: Zaregistrovat moji stanici
+
+kennel:
+    name: Název stanice
+    breeds: Plemena
+    purposes: Zaměření
+    description_cz: Popis (česky)
+    description_en: Popis (anglicky)
+    description_sk: Popis (slovensky)
+    city: Město
+    region: Kraj/Oblast
+    country: Stát
+    phone: Telefon
+    email: E-mail
+    website: Webové stránky
+    facebook: Facebook
+    instagram: Instagram
+    dogs: Psi stanice
+    litters: Vrhy
+    gallery: Galerie
+    contact: Kontakt
+    location: Lokalita
+    purpose.show: Výstavní
+    purpose.work: Pracovní
+    purpose.sport: Sportovní
+    purpose.family: Rodinný
+    purpose.hunting: Lovecký
+    purpose.herding: Pastevecký
+    purpose.companion: Společenský
+    edit_profile: Upravit profil
+    add_dog: Přidat psa
+    add_litter: Přidat vrh
+    verified: Ověřená stanice
+    active: Aktivní
+    create_new: Vytvořit chovatelskou stanici
+    edit: Upravit profil stanice
+    no_dogs: Žádní psi zatím
+    no_litters: Žádné vrhy zatím
+    no_photos: Žádné fotografie zatím
+
+dog:
+    name: Jméno psa
+    gender: Pohlaví
+    gender.male: Pes
+    gender.female: Fena
+    breed: Plemeno
+    born_at: Datum narození
+    titles: Tituly
+    registration_number: Číslo průkazu
+    chip_number: Čip
+    is_stud: K dispozici pro krytí
+    description: Popis
+    add_new: Přidat nového psa
+    edit: Upravit psa
+    age: "stáří: %age% let"
+
+litter:
+    letter: Označení vrhu
+    is_planned: Plánovaný vrh
+    born_at: Datum narození
+    available_from: Dostupná od
+    mother: Matka
+    father: Otec
+    total_puppies: Celkem štěňat
+    male_puppies: Psi
+    female_puppies: Feny
+    has_puppies_available: Štěňata k dispozici
+    description: Popis vrhu
+    add_new: Přidat vrh
+    edit: Upravit vrh
+    puppies: Štěňata
+
+puppy:
+    status.available: K dispozici
+    status.reserved: Rezervováno
+    status.sold: Prodáno
+    status.kept: Ponecháno v chovu
+
+search:
+    title: Vyhledávání chovatelských stanic
+    filter_name: Název stanice
+    filter_breed: Plemeno
+    filter_country: Stát
+    filter_region: Kraj/Oblast
+    filter_purpose: Zaměření
+    filter_btn: Filtrovat
+    reset_btn: Zrušit filtry
+    results: "Nalezeno %count% stanic"
+    no_results: Nebyly nalezeny žádné stanice odpovídající vašemu dotazu
+    any_breed: Všechna plemena
+    any_country: Všechny státy
+    any_purpose: Všechna zaměření
+
+form:
+    first_name: Jméno
+    last_name: Příjmení
+    email: E-mail
+    password: Heslo
+    agree_terms: Souhlasím s podmínkami použití
+    select_country: Vyberte stát
+    select_dog: Vyberte psa
+    submit: Uložit
+    cancel: Zrušit
+    save: Uložit změny
+
+auth:
+    login_title: Přihlášení
+    register_title: Registrace
+    no_account: Nemáte účet?
+    have_account: Již máte účet?
+    forgot_password: Zapomněli jste heslo?
+    remember_me: Zapamatovat si mě
+
+dashboard:
+    title: Moje chovatelská stanice
+    no_kennel: Ještě nemáte registrovanou chovatelskou stanici
+    create_kennel: Vytvořit stanici
+    my_dogs: Moji psi
+    my_litters: Moje vrhy
+    edit_profile: Upravit profil
+
+admin:
+    dashboard: Dashboard
+    users: Uživatelé
+    kennels: Stanice
+    breeds: Plemena
+    total_users: Celkem uživatelů
+    total_kennels: Celkem stanic
+    total_breeds: Celkem plemen
+    make_admin: Udělit admin
+    remove_admin: Odebrat admin
+    activate: Aktivovat
+    deactivate: Deaktivovat
+    verify: Ověřit
+    unverify: Zrušit ověření
+    delete: Smazat
+    confirm_delete: Opravdu chcete smazat?
+    add_breed: Přidat plemeno
+    breed_name_cz: Název (česky)
+    breed_name_en: Název (anglicky)
+    breed_name_sk: Název (slovensky)
+    fic_code: FCI kód
+    group: Skupina
+    size: Velikost
+
+flash:
+    registration_success: Registrace proběhla úspěšně. Vítejte!
+    kennel_created: Chovatelská stanice byla úspěšně vytvořena.
+    kennel_updated: Profil stanice byl aktualizován.
+    kennel_deleted: Stanice byla smazána.
+    dog_added: Pes byl přidán do stanice.
+    dog_updated: Údaje psa byly aktualizovány.
+    litter_added: Vrh byl přidán.
+    litter_updated: Vrh byl aktualizován.
+    user_updated: Uživatel byl aktualizován.
+    user_deleted: Uživatel byl smazán.
+    breed_created: Plemeno bylo přidáno.
+    breed_updated: Plemeno bylo aktualizováno.
+    breed_deleted: Plemeno bylo smazáno.
+
+validation:
+    email_exists: Tento e-mail je již registrován.
+    slug_exists: Tato URL je již obsazena.
+    password_required: Heslo je povinné.
+    password_min: Heslo musí mít alespoň %limit% znaků.
+    agree_terms: Musíte souhlasit s podmínkami.
+
+footer:
+    rights: Všechna práva vyhrazena
+    about: O aplikaci
+    contact: Kontakt
+    privacy: Ochrana osobních údajů

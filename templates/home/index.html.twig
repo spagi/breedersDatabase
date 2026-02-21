@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PaW Breeders — {{ 'home.hero_title'|trans }}{% endblock %}
+
+{% block body %}
+
+{# ── Hero ── #}
+<section class="hero">
+    <div class="hero-content">
+        <h1>{{ 'home.hero_title'|trans }}</h1>
+        <p>{{ 'home.hero_subtitle'|trans }}</p>
+        <form class="hero-search" action="{{ path('app_search') }}" method="get">
+            <input type="text" name="name" placeholder="{{ 'home.search_placeholder'|trans }}" value="">
+            <button type="submit">{{ 'home.search_btn'|trans }}</button>
+        </form>
+    </div>
+</section>
+
+{# ── Stats ── #}
+<div class="stats-bar">
+    <div class="stats-bar-inner">
+        <div class="stat-item">
+            <span class="stat-number">{{ totalKennels }}</span>
+            <span class="stat-label">{{ 'home.stats_kennels'|trans }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">{{ totalLitters }}</span>
+            <span class="stat-label">{{ 'home.stats_litters'|trans }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">{{ breeds|length }}</span>
+            <span class="stat-label">{{ 'home.stats_breeds'|trans }}</span>
+        </div>
+    </div>
+</div>
+
+{# ── Latest Kennels ── #}
+<section class="section" style="max-width:1280px;margin:0 auto;">
+    <div class="section-header">
+        <h2 class="section-title">{{ 'home.latest_kennels'|trans }}</h2>
+        <a href="{{ path('app_search') }}" class="view-all-link">{{ 'home.view_all'|trans }} →</a>
+    </div>
+
+    {% if latestKennels is empty %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🏡</div>
+            <h3>{{ 'home.no_kennels'|trans }}</h3>
+            {% if not is_granted('ROLE_USER') %}
+                <a href="{{ path('app_register') }}" class="btn btn-primary mt-2">{{ 'home.register_kennel'|trans }}</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="kennel-grid">
+            {% for kennel in latestKennels %}
+                <a href="{{ path('app_kennel_show', {slug: kennel.slug}) }}" class="kennel-card" style="text-decoration:none;color:inherit;">
+                    <div class="kennel-card-cover">
+                        {% if kennel.coverFilename %}
+                            <img src="/uploads/covers/{{ kennel.coverFilename }}" alt="{{ kennel.name }}">
+                        {% endif %}
+                        <div class="kennel-card-badge">
+                            {% if kennel.isVerified %}
+                                <span class="badge badge-verified">✓ {{ 'kennel.verified'|trans }}</span>
+                            {% endif %}
+                            {% for breed in kennel.breeds|slice(0,2) %}
+                                <span class="badge badge-green">{{ breed.getName(app.request.locale) }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="kennel-card-body">
+                        <h3 class="kennel-card-title">{{ kennel.name }}</h3>
+                        <div class="kennel-card-meta">
+                            {% if kennel.location %}
+                                <span class="meta-item">📍 {{ kennel.location }}</span>
+                            {% endif %}
+                            {% if kennel.purposes %}
+                                <span class="meta-item">🎯
+                                {% for p in kennel.purposes|slice(0,2) %}
+                                    {{ ('kennel.purpose.' ~ p)|trans }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="kennel-card-footer">
+                            <span class="text-muted" style="font-size:.8rem;">
+                                {{ kennel.dogs|length }} {{ 'kennel.dogs'|trans|lower }}
+                                · {{ kennel.litters|length }} {{ 'kennel.litters'|trans|lower }}
+                            </span>
+                            <span class="btn btn-sm btn-primary">{{ 'search.filter_btn'|trans }}</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+{# ── Puppies Available ── #}
+{% if puppiesAvailable is not empty %}
+<section class="section" style="background:#fff;border-top:1px solid var(--color-cream-dark);border-bottom:1px solid var(--color-cream-dark);">
+    <div style="max-width:1280px;margin:0 auto;">
+        <div class="section-header">
+            <h2 class="section-title">{{ 'home.puppies_available'|trans }} 🐶</h2>
+        </div>
+        <div class="kennel-grid">
+            {% for litter in puppiesAvailable|slice(0,3) %}
+                <div class="litter-card">
+                    <div class="litter-card-side"></div>
+                    <div class="litter-card-body">
+                        <h3 class="litter-title">
+                            <a href="{{ path('app_kennel_show', {slug: litter.kennel.slug}) }}">{{ litter.kennel.name }}</a>
+                        </h3>
+                        <div class="flex gap-1 flex-wrap mb-1">
+                            {% for breed in litter.kennel.breeds|slice(0,2) %}
+                                <span class="badge badge-green">{{ breed.getName(app.request.locale) }}</span>
+                            {% endfor %}
+                            {% if litter.bornAt %}
+                                <span class="badge badge-amber">{{ litter.bornAt|date('d.m.Y') }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="litter-stats">
+                            <div class="litter-stat">
+                                <span class="litter-stat-num">{{ litter.malePuppies }}</span>
+                                <span>♂</span>
+                            </div>
+                            <div class="litter-stat">
+                                <span class="litter-stat-num">{{ litter.femalePuppies }}</span>
+                                <span>♀</span>
+                            </div>
+                            <div class="litter-stat">
+                                <span class="litter-stat-num">{{ litter.totalPuppies }}</span>
+                                <span>{{ 'litter.total_puppies'|trans }}</span>
+                            </div>
+                        </div>
+                        {% if litter.kennel.location %}
+                            <span class="text-muted" style="font-size:.82rem;">📍 {{ litter.kennel.location }}</span>
+                        {% endif %}
+                        <div class="mt-2">
+                            <a href="{{ path('app_kennel_show', {slug: litter.kennel.slug}) }}" class="btn btn-sm btn-primary">
+                                {{ 'search.filter_btn'|trans }} →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# ── Browse by Breed ── #}
+{% if breeds is not empty %}
+<section class="section" style="max-width:1280px;margin:0 auto;">
+    <h2 class="section-title mb-3">🐕 {{ 'nav.kennels'|trans }}</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:.6rem;">
+        {% for breed in breeds|slice(0,30) %}
+            <a href="{{ path('app_search', {breed: breed.id}) }}"
+               style="display:inline-block;padding:.4rem 1rem;background:#fff;border:1.5px solid var(--color-cream-dark);border-radius:2rem;font-size:.85rem;color:var(--color-text);transition:all .2s;box-shadow:var(--shadow-card);"
+               onmouseover="this.style.background='var(--color-forest)';this.style.color='#fff';this.style.borderColor='var(--color-forest)'"
+               onmouseout="this.style.background='#fff';this.style.color='var(--color-text)';this.style.borderColor='var(--color-cream-dark)'">
+                {{ breed.getName(app.request.locale) }}
+            </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
