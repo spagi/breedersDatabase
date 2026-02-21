@@ -1,0 +1,27 @@
+# Never send these into the Docker build context
+vendor/
+var/
+node_modules/
+public/assets/
+public/uploads/
+assets/vendor/
+
+# Git / IDE
+.git/
+.gitignore
+.idea/
+.vscode/
+
+# Local env overrides (never bake secrets into the image)
+.env.local
+.env.local.php
+.env.*.local
+
+# Docker files themselves
+Dockerfile
+docker-compose*.yml
+docker/
+
+# OS noise
+.DS_Store
+Thumbs.db

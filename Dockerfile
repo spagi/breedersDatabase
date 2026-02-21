@@ -10,9 +10,7 @@ RUN apk add --no-cache \
     icu-dev \
     oniguruma-dev \
     nginx \
-    supervisor \
-    nodejs \
-    npm
+    supervisor
 
 # PHP extensions
 RUN docker-php-ext-install \
@@ -23,38 +21,47 @@ RUN docker-php-ext-install \
     mbstring \
     opcache
 
+# Raise PHP memory limit (prevents OOM during composer/asset compile)
+RUN echo "memory_limit = 512M" > /usr/local/etc/php/conf.d/memory.ini
+
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+ENV COMPOSER_MEMORY_LIMIT=-1
+
 WORKDIR /var/www/html
 
-# Copy project files
+# Copy composer manifests first — separate layer for better cache reuse
+COPY composer.json composer.lock symfony.lock ./
+
+# Install all deps (including dev) so fixtures bundle is available
+RUN composer install --optimize-autoloader --no-interaction --no-scripts --no-progress
+
+# Copy the rest of the application
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Run Composer post-install scripts now that full source is present
+RUN composer run-script post-install-cmd --no-interaction 2>/dev/null || true
 
-# Install JS dependencies and build assets
-RUN npm install 2>/dev/null || true
-
-# Set up directories
+# Set up runtime directories
 RUN mkdir -p var/cache var/log var/data public/uploads \
     && chmod -R 777 var public/uploads
 
-# Build assets
-RUN php bin/console asset-map:compile --no-interaction
+# Build assets (AssetMapper)
+RUN APP_ENV=prod php bin/console asset-map:compile --no-interaction
 
-# Setup database
+# Create schema and load demo fixtures
 RUN php bin/console doctrine:schema:create --no-interaction \
     && php bin/console doctrine:fixtures:load --no-interaction
 
-# Nginx config
-COPY docker/nginx.conf /etc/nginx/nginx.conf
+# Drop dev packages from the final image to keep it lean
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --no-progress
 
-# Supervisord config
+# Nginx + Supervisord configs
+COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 
-# PHP-FPM config
+# PHP-FPM tuning
 RUN echo "pm.max_children = 10" >> /usr/local/etc/php-fpm.d/zz-docker.conf
 
 EXPOSE 80
