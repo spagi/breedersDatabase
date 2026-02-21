@@ -1,8 +1,11 @@
 #!/bin/sh
 set -e
 
+# Ensure vendor is up to date (handles stale named volumes and fresh source mounts)
+echo "[entrypoint] Installing/updating composer dependencies..."
+composer install --optimize-autoloader --no-interaction --no-progress 2>&1
+
 echo "[entrypoint] Waiting for MySQL..."
-# depends_on healthcheck guarantees MySQL is up, but retry to be safe
 RETRIES=30
 until mysqladmin ping -h"${MYSQL_HOST:-db}" -u"${MYSQL_USER:-paw}" -p"${MYSQL_PASSWORD:-paw123}" --silent 2>/dev/null; do
     RETRIES=$((RETRIES - 1))

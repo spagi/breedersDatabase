@@ -31,10 +31,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      # Full source code mounted — edits on host are immediately reflected
+      # Full source code mounted — all files visible on host (incl. vendor after first start)
       - .:/var/www/html
-      # Vendor and cache live inside the container (not overridden by host mount)
-      - paw_vendor:/var/www/html/vendor
+      # Cache stays inside the container (platform-specific compiled files)
       - paw_cache:/var/www/html/var/cache
       # Uploads persist across rebuilds
       - paw_uploads:/var/www/html/public/uploads
@@ -54,6 +53,5 @@ services:
 
 volumes:
   mysql_data:
-  paw_vendor:
   paw_cache:
   paw_uploads:
