@@ -50,12 +50,18 @@ RUN mkdir -p var/cache var/log var/data public/uploads \
 # Build assets (AssetMapper)
 RUN APP_ENV=prod php bin/console asset-map:compile --no-interaction
 
-# Create schema and load demo fixtures
+# Create schema and load demo fixtures.
+# DoctrineFixturesBundle is dev-only, so we run in dev env and then copy
+# the seeded database to the prod path so it is available at runtime.
 RUN php bin/console doctrine:schema:create --no-interaction \
-    && php bin/console doctrine:fixtures:load --no-interaction
+    && php bin/console doctrine:fixtures:load --no-interaction \
+    && cp var/data_dev.db var/data_prod.db
 
 # Drop dev packages from the final image to keep it lean
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --no-progress
+
+# Re-warm the prod cache after the autoloader has been trimmed
+RUN APP_ENV=prod php bin/console cache:warmup --no-interaction
 
 # Nginx + Supervisord configs
 COPY docker/nginx.conf /etc/nginx/nginx.conf
@@ -63,6 +69,9 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 
 # PHP-FPM tuning
 RUN echo "pm.max_children = 10" >> /usr/local/etc/php-fpm.d/zz-docker.conf
+
+# Run as production so Symfony skips dev-only bundles (WebProfiler, etc.)
+ENV APP_ENV=prod
 
 EXPOSE 80
 
